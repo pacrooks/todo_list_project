@@ -1,4 +1,11 @@
-public class Restful {
+package comms;
+import java.net.*;
+import java.io.*;
+import java.util.*;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class RESTful {
 
   private static String convertStreamToString(InputStream is) {
     /*
@@ -27,90 +34,38 @@ public class Restful {
     return sb.toString();
   }
     
-  public static void issueHttpGet(String url)
+  public static void httpGet(String stringUrl)
   {
-    HttpClient httpclient = new DefaultHttpClient();
-
-    // Prepare a request object
-    HttpGet httpGet = new HttpGet(url); 
-
-    // Execute the request
-    HttpResponse response;
+    String result = "";
+    URL url = new URL(stringUrl);
+    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
     try {
-      response = httpclient.execute(httpGet);
-      // Examine the response status
-      Log.i("Praeda",response.getStatusLine().toString());
-
-      // Get hold of the response entity
-      HttpEntity entity = response.getEntity();
-      // If the response does not enclose an entity, there is no need
-      // to worry about connection release
-
-      if (entity != null) {
-        // A Simple JSON Response Read
-        InputStream instream = entity.getContent();
-        String result= convertStreamToString(instream);
-        // now you have the string representation of the HTML request
-        instream.close();
-      }
-    } catch (Exception e) {}
+      InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+      result = convertStreamToString(in);
+    } finally {
+      urlConnection.disconnect();
+    }
   }
 
 
-  public static String issueHttpPost(String url,
-              HashMap<String, String> postParameters) throws UnsupportedEncodingException {
-          // TODO Auto-generated method stub
-
-    HttpClient client = getNewHttpClient();
-
-    try{
-      request = new HttpPost(url);
-    }
-    catch(Exception e){
-      e.printStackTrace();
-    }
-
-    if(postParameters!=null && postParameters.isEmpty()==false) {
-      List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(postParameters.size());
-      String k, v;
-      Iterator<String> itKeys = postParameters.keySet().iterator();
-      while (itKeys.hasNext()) {
-        k = itKeys.next();
-        v = postParameters.get(k);
-        nameValuePairs.add(new BasicNameValuePair(k, v));
-      }     
-      UrlEncodedFormEntity urlEntity  = new UrlEncodedFormEntity(nameValuePairs);
-      request.setEntity(urlEntity);
-    }
-
+  public static String issueHttpPost(String stringUrl, HashMap<String, String> postParameters) {
+    URL url = new URL(stringUrl);
+    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+    urlConnection.setDoOutput(true);
+    // urlConnection.setRequestProperty("Accept-Charset", charset);
+    // urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset
     try {
-      Response = client.execute(request,localContext);
-      HttpEntity entity = Response.getEntity();
-      int statusCode = Response.getStatusLine().getStatusCode();
-      Log.i(TAG, ""+statusCode);
-      Log.i(TAG, "------------------------------------------------");
-      try{
-        InputStream in = (InputStream) entity.getContent(); 
-        //Header contentEncoding = Response.getFirstHeader("Content-Encoding");
-        /*if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
-        in = new GZIPInputStream(in);
-        }*/
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        StringBuilder str = new StringBuilder();
-        String line = null;
-        while((line = reader.readLine()) != null) {
-          str.append(line + "\n");
-        }
-        in.close();
-        response = str.toString();
-        Log.i(TAG, "response"+response);
-      } catch(IllegalStateException exc) {
-        exc.printStackTrace();
-      }
-    } catch(Exception e){
-      Log.e("log_tag", "Error in http connection "+response);
+      OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+      writeStream(out);
+
+      InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+      // InputStream response = connection.getInputStream();
+      // readStream(in);
+    } finally {
+      urlConnection.disconnect();
     }
-    return response;
+
   }
 
 }
+

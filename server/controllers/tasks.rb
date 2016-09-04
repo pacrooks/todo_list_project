@@ -7,6 +7,16 @@ def get_user( session_id )
   return User.all.first
 end
 
+def access_allowed( user, task )
+  result = true
+  # result = (task.created_by_user_id == user.id) || (task.allocated_user_id == user.id)
+  # if !result && task.allocated_executive_id
+  #   executives = Membership.users_by_executive_id(task.allocated_executive_id)
+  #   result ||= (executives.select{ |e| e.user_id == user.id }.count > 0)
+  # end
+  return result
+end
+
 # NEW
 # Don't need to create any resources to allow the user to create a new task
 
@@ -28,7 +38,7 @@ get '/tasks' do
   if user
     # tasks = Task.by_allocated_user_id(user.id)
     tasks = Task.all(true)  # exclude deleted 
-    tasks.map{ | t |  t.to_hash() }.to_json
+    tasks.map{ | t |  t.to_skinny_hash() }.to_json
   else
     # User doe not exist
   end
@@ -41,10 +51,10 @@ get '/tasks/:id' do
   user = get_user(params['sessionid'])
   if user
     task = Task.by_id(params['id'].to_i)
-    if task
+    if task && access_allowed(user, task)
       task.to_hash().to_json()
     else
-      # Can't find the resource
+      # Can't find the resource or not allowed to see it
     end
   else
     # No session information for the user
@@ -60,7 +70,7 @@ post '/tasks/:id' do
   user = get_user(params['sessionid'])
   if user
     task = Task.by_id(params['id'].to_i)
-    if task
+    if task && access_allowed(user, task)
       new_task = Task.new(params)
       new_task.update()
     end
@@ -75,7 +85,15 @@ post '/tasks/:id/delete' do
   user = get_user(params['sessionid'])
   if user
     task = Task.by_id(params['id'].to_i)
-    task.delete if task
+    if task && access_allowed(user, task)
+      if task.is_deleted
+        # Is already marked as deleted
+        # Now remove completely
+        task.delete()
+      else
+        task.is_deleted = true
+      end
+    end
   else
     # user does not exist
   end

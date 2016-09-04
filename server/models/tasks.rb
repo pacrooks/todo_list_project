@@ -39,6 +39,17 @@ class Task
     return options
   end
 
+  def to_skinny_hash()
+    options = Hash.new()
+    options['id'] = @id
+    options['headline'] = @headline
+    options['description'] = @description
+    options['priority'] = @priority
+    options['status'] = @status
+    options['category'] = Category.by_id(@category_id).to_hash()
+    return options
+  end
+
   def get_sort_value()
     return instance_variable_get(("@" + Task.get_sort_key()).intern)
   end
