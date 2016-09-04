@@ -44,6 +44,7 @@ get '/tasks' do
     # tasks = Task.by_allocated_user_id(user.id)
     tasks = Task.all(true)  # exclude deleted 
     tasks.map!{ | t |  t.to_skinny_hash() }
+    content_type :json
     { :tasks => tasks }.to_json
   else
     # User doe not exist
@@ -58,6 +59,7 @@ get '/tasks/:id' do
   if user
     task = Task.by_id(params['id'].to_i)
     if task && access_allowed(user, task)
+      content_type :json
       task.to_hash().to_json()
     else
       # Can't find the resource or not allowed to see it
