@@ -24,29 +24,21 @@ class Task
     return @id
   end
 
-  def to_hash()
-    options = Hash.new()
-    options['id'] = @id
-    options['headline'] = @headline
-    options['description'] = @description
-    options['create_date'] = @create_date
-    options['target_date'] = @target_date
-    options['priority'] = @priority
-    options['status'] = @status
-    options['category'] = Category.by_id(@category_id).to_hash()
-    notes = Note.by_task_id(@id)     
-    options['notes'] = notes.map{ |n| n.to_hash() } 
-    return options
+  def to_hash ()
+    hash = {}
+    self.instance_variables.each {|var| hash[var.to_s.delete("@")] =
+      self.instance_variable_get(var) }
+    return hash
   end
 
   def to_skinny_hash()
     options = Hash.new()
     options['id'] = @id
-    options['headline'] = @headline
-    options['description'] = @description
-    options['priority'] = @priority
-    options['status'] = @status
-    options['category'] = Category.by_id(@category_id).to_hash()
+    # options['headline'] = @headline
+    # options['description'] = @description
+    # options['priority'] = @priority
+    # options['status'] = @status
+    # options['category_id'] = @category_id
     return options
   end
 
@@ -56,6 +48,14 @@ class Task
 
   def <=>( neighbour )
     return get_sort_value() <=> neighbour.get_sort_value()
+  end
+
+  def created_by?( user_id )
+    return (user_id == @created_by_user_id)
+  end
+
+  def allocated_to?( user_id )
+    return (user_id == @allocated_user_id)
   end
 
   def initialize( options )

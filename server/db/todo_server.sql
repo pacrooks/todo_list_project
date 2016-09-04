@@ -1,9 +1,9 @@
 DROP TABLE memberships;
 DROP TABLE notes;
 DROP TABLE tasks;
-DROP TABLE executives;
 DROP TABLE sessions;
 DROP TABLE users;
+DROP TABLE executives;
 DROP TABLE categories;
 
 CREATE TABLE executives (
@@ -15,7 +15,8 @@ CREATE TABLE users (
   id serial4 primary key,
   name varchar(255),
   userid varchar(255),
-  password varchar(255)
+  password varchar(255),
+  my_executive_id int4 references executives(id)
 );
 
 CREATE TABLE sessions (

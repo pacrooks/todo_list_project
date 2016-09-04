@@ -3,16 +3,16 @@
 def get_user( session_id )
   # session = Session.by_sessionid(session_id)
   # return nil if !session
+  # session.last_used = Time.now
   # return session.get_user()
   return User.all.first
 end
 
 def access_allowed( user, task )
   result = true
-  # result = (task.created_by_user_id == user.id) || (task.allocated_user_id == user.id)
+  # result = ((task.created_by?( user.id ) || (task.allocated_to?( user.id ))
   # if !result && task.allocated_executive_id
-  #   executives = Membership.users_by_executive_id(task.allocated_executive_id)
-  #   result ||= (executives.select{ |e| e.user_id == user.id }.count > 0)
+  #   result ||= Membership.is_member?( user.id, task.allocated_executive_id )
   # end
   return result
 end
@@ -22,8 +22,13 @@ end
 
 # CREATE
 post '/tasks' do
-  # The user has POSTed the stock NEW form
+  user = get_user(params['sessionid'])
   if user
+    # All newly created tasks are allocated to the creator by default
+    # This can be edited later
+    params['created_by_user_id'] = user.id
+    params['allocated_user_id'] = user.id
+    params['allocated_executive_id'] = user.my_executive_id
     new_task = Task.new(params)
     new_task.save()
   else
@@ -38,7 +43,8 @@ get '/tasks' do
   if user
     # tasks = Task.by_allocated_user_id(user.id)
     tasks = Task.all(true)  # exclude deleted 
-    tasks.map{ | t |  t.to_skinny_hash() }.to_json
+    tasks.map!{ | t |  t.to_skinny_hash() }
+    { :tasks => tasks }.to_json
   else
     # User doe not exist
   end

@@ -1,4 +1,7 @@
 require_relative( '../db/db_interface' )
+require_relative( 'executives' )
+require_relative( 'memberships' )
+require( 'pry-byebug' )
 
 class User
   TABLE = "users"
@@ -10,6 +13,7 @@ class User
 
   def save()
     @id = DbInterface.insert(TABLE, self)
+    Membership.new({ 'user_id' => @id, 'executive_id' => @my_executive_id }).save()
     return @id
   end
 
@@ -31,6 +35,12 @@ class User
     @name = options['name']
     @userid = options['userid']
     @password = options['password']
+    @my_executive_id = options['my_executive_id'].to_i
+    if (@my_executive_id == 0)
+      my_executive = Executive.new({ 'name' => @userid })
+      my_executive.save()
+      @my_executive_id = my_executive.id
+    end
   end
 
   # Class methods start here
@@ -68,8 +78,10 @@ class User
   def self.set_unassigned_id()
     if !@@unassigned_id
       user = User.by_name( UNASSIGNED )
-      user = User.new( { 'name' => UNASSIGNED } ) if !user
-      user.save
+      if !user
+        user = User.new( { 'name' => UNASSIGNED, 'userid' => UNASSIGNED } )
+        user.save
+      end
       @@unassigned_id = user.id
     end
   end

@@ -1,4 +1,5 @@
 require_relative( '../db/db_interface' )
+require( 'pry-byebug' )
 
 class Executive
   TABLE = "executives"
@@ -56,8 +57,10 @@ class Executive
   def self.set_unassigned_id()
     if !@@unassigned_id
       executive = Executive.by_name( UNASSIGNED )
-      executive = Executive.new( { 'name' => UNASSIGNED } ) if !executive
-      executive.save
+      if !executive
+        executive = Executive.new( { 'name' => UNASSIGNED } ).save
+        executive.save
+      end
       @@unassigned_id = executive.id
     end
   end

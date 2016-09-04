@@ -22,12 +22,15 @@ class Category
     return @id
   end
 
-  def to_hash()
-    options = Hash.new
-    options['id'] = @id
-    options['name'] = @name
-    options['colour'] = @colour
-    return options
+  def to_hash ()
+    hash = {}
+    self.instance_variables.each {|var| hash[var.to_s.delete("@")] =
+      self.instance_variable_get(var) }
+    return hash
+  end
+
+  def to_skinny_hash()
+    return { 'id' => @id }
   end
 
   def initialize( options )
@@ -65,8 +68,10 @@ class Category
   def self.set_unassigned_id()
     if !@@unassigned_id
       category = Category.by_name( UNASSIGNED )
-      category = Category.new( { 'name' => UNASSIGNED } ) if !category
-      category.save
+      if !category
+        category = Category.new( { 'name' => UNASSIGNED } )
+        category.save
+      end
       @@unassigned_id = category.id
     end
   end

@@ -1,4 +1,5 @@
 require_relative( '../db/db_interface' )
+require( 'pry-byebug' )
 
 class Membership
   TABLE = "memberships"
@@ -51,6 +52,11 @@ class Membership
     sql = "SELECT users.* FROM #{table} WHERE executives.id = #{executive_id}"
     users = SqlRunner.run( sql )
     return users.map{ |u| User.new( u ) }
+  end
+
+  def self.is_member?( user_id, executive_id )
+    members = Membership.users_by_executive_id(executive_id)
+    return (members.select{ |m| m.user_id == user_id }.count > 0)
   end
 
   def self.destroy( id = nil )
