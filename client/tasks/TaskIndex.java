@@ -35,7 +35,7 @@ public class TaskIndex {
       // Do something
       System.out.println("Exception raised.");
     }
-    response = request.receiveResponse();
+    response = request.receiveString();
   }
 
 // Might need to inject this method somehow
