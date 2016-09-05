@@ -70,7 +70,6 @@ public class RemoteTask extends Task {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
   }
 
   public int save() {
