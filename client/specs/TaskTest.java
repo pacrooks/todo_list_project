@@ -39,10 +39,13 @@ public class TaskTest{
 
   @Test
   public void expandIndexTest(){
-    // ArrayList<Task> taskList = new ArrayList<Task>();
-    // ti.fetch();
-    // ti.expand(taskList);
-    // assertEquals(2, taskList.size()); 
+    Session.login("matt", "matt");
+    TaskIndex ti = new RemoteTaskIndex();
+    ArrayList<Task> taskList = new ArrayList<Task>();
+    ti.fetch();
+    ti.expand(taskList);
+    assertEquals(1, taskList.size());
+    Session.logout();
   }
 
 }

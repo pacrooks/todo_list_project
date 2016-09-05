@@ -10,6 +10,13 @@ public abstract class Request {
   protected HttpURLConnection con;
   protected StringBuffer response;
   protected int responseCode;
+  protected HashMap<String, String> args;
+  protected String stringUrl;
+
+  public Request(String url) {
+    stringUrl = baseUrl + url;
+    args = new HashMap<String, String>();
+  }
 
   public abstract void sendRequest() throws Exception;
 

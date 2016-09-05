@@ -5,17 +5,16 @@ import java.io.*;
 import java.util.*;
 
 public class PostRequest extends Request {
-  private String stringUrl;
-  private HashMap<String, String> args;
 
-  public PostRequest(/*Session session,*/ String url) {
-    stringUrl = baseUrl + url;
-    args = new HashMap<String, String>();
+  public PostRequest(String url) {
+    super(url);
+    args.put("sessionid", Session.getSessionId());
   }
 
-  public PostRequest(/*Session session,*/ String url, HashMap<String, String> args) {
+  public PostRequest(String url, HashMap<String, String> args) {
+    super(url);
     stringUrl = baseUrl + url;
-    this.args = new HashMap<String, String>();
+    args.put("sessionid", Session.getSessionId());
     this.args.putAll(args);
   }
 

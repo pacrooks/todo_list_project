@@ -4,12 +4,11 @@
 # Ask for LOGIN
 get '/sessions/login' do
   # A user wants to login.
+  status 200
   # Supply a session id to start the session off
-
   # generate a response
   content_type :json
   { :sessionid => Session.make_sessionid() }.to_json
-  status 200
 end
 
 # LOGIN

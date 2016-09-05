@@ -4,17 +4,21 @@ import java.net.*;
 import java.util.*;
 
 public class GetRequest extends Request {
-  private String stringUrl;
-  private int responseCode;
 
   public GetRequest (String url) {
-    stringUrl = baseUrl + url;
+    super(url);
+    args.put("sessionid", Session.getSessionId());
   }
 
-  public GetRequest (Session session, String url) {
-    stringUrl = baseUrl + url;
-    // need to get the session across somehow
+  public GetRequest (String url, boolean ommitSession) {
+    super(url);
+    if (!ommitSession) {
+      args.put("sessionid", Session.getSessionId());
+    }
+  }
 
+  public void addArgs(HashMap<String, String> args) {
+    this.args.putAll(args);
   }
 
   public void sendRequest() throws Exception {

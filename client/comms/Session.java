@@ -13,29 +13,26 @@ public class Session {
   public static void login (String userid, String password) {
     sessionId = null;
     active = false;
-    GetRequest startSession = new GetRequest("/sessions/login");
+    GetRequest startSession = new GetRequest("/sessions/login", true);
     try {
       startSession.sendRequest();
     } catch (Exception e) {
-      System.out.println("Failed to request session id: " + e);
+
     }
     JSONObject jsonSessionId = startSession.receiveJsonObject();
     try {
       sessionId = jsonSessionId.getString("sessionid");
     } catch (Exception e) {
-      System.out.println("Failed to retrieve session id: " + e);
       sessionId = null;
     }
     if (sessionId != null) {
       HashMap<String, String> args = new HashMap<String, String>();
-      args.put("sessionid", sessionId);
       args.put("userid", userid);
       args.put("password", password);
       PostRequest login = new PostRequest("/sessions", args);
       try {
         login.sendRequest();        
       } catch (Exception e) {
-        System.out.println("Failed to send login request: " + e);
         sessionId = null;
       }
       active = ((sessionId != null) && (login.getResponseCode() == 200));

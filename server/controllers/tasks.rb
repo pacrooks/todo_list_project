@@ -33,6 +33,7 @@ post '/tasks' do
     new_task.save()
   else
     # user does not exist
+    status 401
   end
 end
 
@@ -42,12 +43,13 @@ get '/tasks' do
   user = get_user(params['sessionid'])
   if user
     # tasks = Task.by_allocated_user_id(user.id)
-    tasks = Task.all(true)  # exclude deleted 
+    tasks = Task.by_allocated_user_id(user.id)  # exclude deleted 
     tasks.map!{ | t |  t.id }
     content_type :json
     tasks.to_json
   else
     # User doe not exist
+    status 401
   end
 
 end
@@ -63,9 +65,11 @@ get '/tasks/:id' do
       task.to_hash().to_json()
     else
       # Can't find the resource or not allowed to see it
+      status 404
     end
   else
     # No session information for the user
+    status 401
   end
 
 end
@@ -84,6 +88,7 @@ post '/tasks/:id' do
     end
   else
     # user does not exist
+    status 401
   end
 
 end
@@ -104,5 +109,6 @@ post '/tasks/:id/delete' do
     end
   else
     # user does not exist
+    status 401
   end
 end
