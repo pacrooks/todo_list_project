@@ -17,9 +17,9 @@ def setup
   @category2.save()
   @unassigned_category_id = Category.get_unassigned_id()
 
-  @user1 = User.new( { 'name' => 'Matthew', 'userid' => 'matt' } )
+  @user1 = User.new( { 'name' => 'Matthew', 'userid' => 'matt', 'password' => 'matt' } )
   @user1.save()
-  @user2 = User.new( { 'name' => 'Mark', 'userid' => 'mark' } )
+  @user2 = User.new( { 'name' => 'Mark', 'userid' => 'mark', 'password' => '' } )
   @user2.save()
   @unassigned_user_id = User.get_unassigned_id()
 

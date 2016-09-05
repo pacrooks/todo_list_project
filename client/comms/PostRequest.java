@@ -6,19 +6,21 @@ import java.util.*;
 
 public class PostRequest extends Request {
   private String stringUrl;
-  private int responseCode;
+  private HashMap<String, String> args;
 
   public PostRequest(/*Session session,*/ String url) {
     stringUrl = baseUrl + url;
-
+    args = new HashMap<String, String>();
   }
 
   public PostRequest(/*Session session,*/ String url, HashMap<String, String> args) {
     stringUrl = baseUrl + url;
+    this.args = new HashMap<String, String>();
+    this.args.putAll(args);
   }
 
   public void addArgs(HashMap<String, String> args) {
-
+    this.args.putAll(args);
   }
 
   public void sendRequest() throws Exception {
@@ -30,19 +32,20 @@ public class PostRequest extends Request {
     // con.setRequestProperty("User-Agent", USER_AGENT);
     // con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-    // String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
+    String urlParameters = makeArgsString(args);
 
     // Send post request
+    con.setDoInput(true);
     con.setDoOutput(true);
     DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-    // wr.writeBytes(urlParameters);
-    // wr.flush();
-    // wr.close();
+    wr.writeBytes(urlParameters);
+    wr.flush();
+    wr.close();
 
     responseCode = con.getResponseCode();
-    // System.out.println("\nSending 'POST' request to URL : " + url);
-    // System.out.println("Post parameters : " + urlParameters);
-    // System.out.println("Response Code : " + responseCode);
+    System.out.println("\nSending 'POST' request to URL : " + url);
+    System.out.println("Post parameters : " + urlParameters);
+    System.out.println("Response Code : " + responseCode);
 
     response = fillBuffer(con);
   }

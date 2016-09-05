@@ -7,7 +7,15 @@ class Session
   TABLE = "sessions"
 
   attr_reader :id
-  attr_accessor :sessionid, :last_used, :user_id
+  attr_accessor :sessionid, :user_id
+
+  def last_used=( time )
+    @last_used = time.to_s
+  end
+
+  def last_used()
+    return @last_used
+  end
 
   def save()
     @id = DbInterface.insert(TABLE, self)
@@ -31,7 +39,7 @@ class Session
   def initialize( options )
     @id = options['id'].to_i
     @sessionid = options['sessionid']
-    @last_used = options['last_used']
+    @last_used = options['last_used'].to_s
     @user_id = options['user_id'].to_i
   end
 

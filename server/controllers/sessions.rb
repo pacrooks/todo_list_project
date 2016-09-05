@@ -9,6 +9,7 @@ get '/sessions/login' do
   # generate a response
   content_type :json
   { :sessionid => Session.make_sessionid() }.to_json
+  status 200
 end
 
 # LOGIN
@@ -25,15 +26,18 @@ post '/sessions' do
     if !session
       session = Session.new({
         'sessionid' => session_id,
-        'last_used' => Time.now,
-        'user_id' => user_id
+        'user_id' => user.id,
+        'last_used' => Time.now
         })
       session.save
+      status 200
     else
       # Internal processing error. The session already exists
+      status 500
     end
   else
     # The user id and password don't check out. Authentication error.
+    status 401
   end
 end
 
@@ -42,5 +46,10 @@ post '/sessions/logout' do
   # A user wants to end their session
   session_id = params['sessionid']
   session = Session.by_sessionid(session_id)
-  session.delete if session
+  if session
+    session.delete
+    status 200
+  else
+    status 404
+  end
 end
