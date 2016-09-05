@@ -9,7 +9,7 @@ class User
   @@unassigned_id = nil
 
   attr_reader :id
-  attr_accessor :name, :userid
+  attr_accessor :name, :userid, :my_executive_id
 
   def save()
     @id = DbInterface.insert(TABLE, self)

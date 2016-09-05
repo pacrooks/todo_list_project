@@ -51,12 +51,12 @@ class Task
     @id = options['id'].to_i
     @headline = options ['headline']
     @description = options['description']
-    @create_date = options['create_date']
-    @target_date = options['target_date']
+    @create_date = options['create_date'] == "null" ? nil : options['create_date']
+    @target_date = options['target_date'] == "null" ? nil : options['target_date']
     @priority = options['priority'].to_i
     @status = options['status'].to_i
     @created_by_user_id = options['created_by_user_id'].to_i
-    @category_id = options['category_id'].to_i
+    @category_id = options['category_id'].to_i == 0 ? Category.get_unassigned_id() : options['category_id'].to_i
     @allocated_executive_id = options['allocated_executive_id'].to_i
     @allocated_user_id = options['allocated_user_id'].to_i
     # @is_deleted will be boolean values when first created but "f" or "t" from the database

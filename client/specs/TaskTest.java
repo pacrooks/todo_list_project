@@ -48,4 +48,16 @@ public class TaskTest{
     Session.logout();
   }
 
+  @Test
+  public void createNewTask(){
+    Session.login("matt", "matt");
+    RemoteTask rt = new RemoteTask();
+    rt.headline = "Make BIG NEWS";
+    rt.description = "Steal £10,000,000";
+    rt.createDate = Calendar.getInstance().getTime();
+    rt.save();
+    assertEquals(true, rt.getId() > 0);
+    Session.logout();
+  }
+
 }

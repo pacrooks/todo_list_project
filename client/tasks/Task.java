@@ -34,4 +34,8 @@ public abstract class Task {
   public abstract int save();
   public abstract void update();
   public abstract void delete();
+
+  public int getId() {
+    return id;
+  }
 }

@@ -26,10 +26,10 @@ post '/tasks' do
   if user
     # All newly created tasks are allocated to the creator by default
     # This can be edited later
-    params['created_by_user_id'] = user.id
-    params['allocated_user_id'] = user.id
-    params['allocated_executive_id'] = user.my_executive_id
     new_task = Task.new(params)
+    new_task.created_by_user_id = user.id
+    new_task.allocated_user_id = user.id
+    new_task.allocated_executive_id = user.my_executive_id
     new_task.save()
     { :id => new_task.id }.to_json
   else
