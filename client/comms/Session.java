@@ -4,30 +4,29 @@ import org.json.*;
 import java.util.*;
 
 public class Session {
-  private String sessionId;
-  private boolean active;
+  private static String sessionId = null;
+  private static boolean active = false;
 
-  public Session () {
+  private Session () {
+  }
+
+  public static void login (String userid, String password) {
     sessionId = null;
     active = false;
     GetRequest startSession = new GetRequest("/sessions/login");
     try {
       startSession.sendRequest();
     } catch (Exception e) {
-      // Fail silently
+      System.out.println("Failed to request session id: " + e);
     }
     JSONObject jsonSessionId = startSession.receiveJsonObject();
     try {
       sessionId = jsonSessionId.getString("sessionid");
     } catch (Exception e) {
-      // Fail silently
+      System.out.println("Failed to retrieve session id: " + e);
       sessionId = null;
     }
-  }
-
-  public void login (String userid, String password) {
-    if ((sessionId != null) && !active) {
-      System.out.println("Attempting to login.");
+    if (sessionId != null) {
       HashMap<String, String> args = new HashMap<String, String>();
       args.put("sessionid", sessionId);
       args.put("userid", userid);
@@ -36,13 +35,14 @@ public class Session {
       try {
         login.sendRequest();        
       } catch (Exception e) {
+        System.out.println("Failed to send login request: " + e);
         sessionId = null;
       }
       active = ((sessionId != null) && (login.getResponseCode() == 200));
     }
   }
 
-  public void logout () {
+  public static void logout () {
     if (active) {
       HashMap<String, String> args = new HashMap<String, String>();
       args.put("sessionid", sessionId);
@@ -59,11 +59,11 @@ public class Session {
     }
   }
 
-  public boolean isActive() {
+  public static boolean isActive() {
     return active;
   }
 
-  public String getSessionId() {
+  public static String getSessionId() {
     return sessionId;
   }
 

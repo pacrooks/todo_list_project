@@ -9,32 +9,32 @@ public class TaskTest{
 
   @Before
   public void before(){
-    //ti = new RemoteTaskIndex();
   }
 
   @Test
   public void checkSessionId() {
-    Session session = new Session();
-    session.login("philc", "test");
-    assertEquals(true, session.getSessionId() == null);
-    assertEquals(false, session.isActive());
+    Session.login("philc", "test");
+    assertEquals(true, Session.getSessionId() == null);
+    assertEquals(false, Session.isActive());
   }
 
   @Test
   public void loginAndLogout() {
-    Session session = new Session();
-    session.login("matt", "matt");
-    assertEquals(false, session.getSessionId() == null);
-    assertEquals(true, session.isActive());
-    session.logout();
-    assertEquals(true, session.getSessionId() == null);
-    assertEquals(false, session.isActive());
+    Session.login("matt", "matt");
+    assertEquals(false, Session.getSessionId() == null);
+    assertEquals(true, Session.isActive());
+    Session.logout();
+    assertEquals(true, Session.getSessionId() == null);
+    assertEquals(false, Session.isActive());
   }
 
   @Test
   public void retrieveIndexTest(){
-    // ti.fetch();
-    // assertEquals(2, ti.length());
+    Session.login("matt", "matt");
+    TaskIndex ti = new RemoteTaskIndex();
+    ti.fetch();
+    assertEquals(1, ti.length());
+    Session.logout();
   }
 
   @Test
