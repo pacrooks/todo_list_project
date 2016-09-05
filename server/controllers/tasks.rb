@@ -31,6 +31,7 @@ post '/tasks' do
     params['allocated_executive_id'] = user.my_executive_id
     new_task = Task.new(params)
     new_task.save()
+    { :id => new_task.id }.to_json
   else
     # user does not exist
     status 401
@@ -85,6 +86,9 @@ post '/tasks/:id' do
     if task && access_allowed(user, task)
       new_task = Task.new(params)
       new_task.update()
+      status 200
+    else
+      status 404
     end
   else
     # user does not exist
@@ -106,6 +110,9 @@ post '/tasks/:id/delete' do
       else
         task.is_deleted = true
       end
+      status 200
+    else
+      status 404
     end
   else
     # user does not exist

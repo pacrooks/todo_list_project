@@ -21,10 +21,10 @@ public abstract class Task {
     id = 0;
     priority = 0;
     status = 0;
-    createdByUserId = 0;
+    // createdByUserId = 0;
     categoryId = 0;
-    allocatedUserId = 0;
-    allocatedExecutiveId = 0;
+    // allocatedUserId = 0;
+    // allocatedExecutiveId = 0;
     headline = "";
     description = "";
     isDeleted = false;
