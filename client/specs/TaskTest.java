@@ -60,4 +60,18 @@ public class TaskTest{
     Session.logout();
   }
 
+  @Test
+  public void updateNewTask(){
+    Session.login("matt", "matt");
+    RemoteTask rt = new RemoteTask();
+    rt.headline = "Try harder";
+    rt.description = "Steal £10,000,000";
+    rt.createDate = Calendar.getInstance().getTime();
+    rt.save();
+    rt.headline = "Try even harder";
+    rt.description = "Steal a fiver";
+    rt.update();
+    Session.logout();
+  }
+
 }

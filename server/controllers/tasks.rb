@@ -85,6 +85,11 @@ post '/tasks/:id' do
     task = Task.by_id(params['id'].to_i)
     if task && access_allowed(user, task)
       new_task = Task.new(params)
+      # The next three fields are ignored by the client at the moment
+      # They have to be set to keep the database happy
+      new_task.created_by_user_id = user.id
+      new_task.allocated_user_id = user.id
+      new_task.allocated_executive_id = user.my_executive_id
       new_task.update()
       status 200
     else
