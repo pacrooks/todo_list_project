@@ -21,7 +21,7 @@ public class Session {
       sessionId = null;
     }
     if (!sessionId.isEmpty()) {
-      PostRequest login = new PostRequest( )
+      //PostRequest login = new PostRequest( );
     }
 
   }

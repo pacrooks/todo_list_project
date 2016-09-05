@@ -30,7 +30,7 @@ public abstract class Request {
     return response.toString();
   }
 
-  public int[] recieveIndexArray() {
+  public int[] receiveIndexArray() {
     int[] intArray = null;
     try {
       JSONArray jsonArray = new JSONArray(response.toString());

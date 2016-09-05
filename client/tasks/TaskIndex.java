@@ -1,16 +1,14 @@
 package tasks;
 
-import comms.*;
 import java.util.*;
 
-public class TaskIndex {
-  private ArrayList<Integer> indices;
-  private String ordering;
-  private boolean reverseOrder;
-  public String response;
+public abstract class TaskIndex {
+  protected int[] indices;
+  protected String ordering;
+  protected boolean reverseOrder;
 
   public TaskIndex() {
-    indices = new ArrayList<Integer>();
+    indices = null;
     ordering = "";
     reverseOrder = false;
   }
@@ -23,26 +21,17 @@ public class TaskIndex {
     reverseOrder = reverse;
   }
 
-  public void fetch() {
-    String url = "/tasks";
-    if (!(ordering.isEmpty() && reverseOrder)) {
-      // Create a query string
-    }
-    GetRequest request = new GetRequest(url);
-    try {
-      request.sendRequest();
-    } catch (Exception e) {
-      // Do something
-      System.out.println("Exception raised.");
-    }
-    response = request.receiveString();
+  public int length() {
+    if (indices == null) return 0;
+    return indices.length;
   }
 
-// Might need to inject this method somehow
-  public void expand(ArrayList<Task> tasks) {
-    for (int index : indices) {
-      tasks.add(new RemoteTask(index));
-    }
+  public int getIndex(int i) {
+    if ((indices == null) || (i < 0) || (i >= indices.length)) return 0;
+    return indices[i];
   }
+
+  public abstract void fetch();
+  public abstract void expand(ArrayList<Task> tasks);
 
 }
