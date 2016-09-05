@@ -7,7 +7,11 @@ public class GetRequest extends Request {
   private String stringUrl;
   private int responseCode;
 
-  public GetRequest (/*Session session,*/ String url) {
+  public GetRequest (String url) {
+    stringUrl = baseUrl + url;
+  }
+
+  public GetRequest (Session session, String url) {
     stringUrl = baseUrl + url;
     // need to get the session across somehow
 

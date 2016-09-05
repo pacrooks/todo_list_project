@@ -29,10 +29,6 @@ class Category
     return hash
   end
 
-  def to_skinny_hash()
-    return { 'id' => @id }
-  end
-
   def initialize( options )
     @id = options['id'].to_i
     @name = options['name']

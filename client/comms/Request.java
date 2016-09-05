@@ -2,6 +2,7 @@ package comms;
 
 import java.net.*;
 import java.io.*;
+import org.json.*;
 
 public abstract class Request {
   protected final String baseUrl = "http://localhost:4567";
@@ -29,13 +30,28 @@ public abstract class Request {
     return response.toString();
   }
 
-  public void recieveJsonArray() {
+  public int[] recieveIndexArray() {
+    int[] intArray = null;
+    try {
+      JSONArray jsonArray = new JSONArray(response.toString());
+      intArray = new int[jsonArray.length()];
+      for (int i = 0; i < jsonArray.length(); i++) {
+        intArray[i] = jsonArray.getInt(i);
+      } 
+    } catch (Exception e) {
 
+    }
+    return intArray;
   }
 
-  public void receiveJsonItem () {
+  public JSONObject receiveJsonObject () {
+    JSONObject jsonObject = null;
+    try {
+      jsonObject = new JSONObject(response.toString());
+    } catch (Exception e) {
 
+    }
+    return jsonObject;
   }
-
 
 }

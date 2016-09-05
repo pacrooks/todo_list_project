@@ -43,9 +43,9 @@ get '/tasks' do
   if user
     # tasks = Task.by_allocated_user_id(user.id)
     tasks = Task.all(true)  # exclude deleted 
-    tasks.map!{ | t |  t.to_skinny_hash() }
+    tasks.map!{ | t |  t.id }
     content_type :json
-    { :tasks => tasks }.to_json
+    tasks.to_json
   else
     # User doe not exist
   end
