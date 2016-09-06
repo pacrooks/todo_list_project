@@ -2,8 +2,8 @@ package categories;
 
 public abstract class Category {
   protected int id;
-  protected String name;
-  protected String colour;
+  public String name;
+  public String colour;
 
   public Category() {
     id = 0;

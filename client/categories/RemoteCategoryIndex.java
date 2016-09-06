@@ -36,13 +36,13 @@ public class RemoteCategoryIndex extends CategoryIndex {
 
   public void expand() {
     for (int i : index.keySet()) {
-      index.put(i, new RemoteCategory(i));
+      index.put(i, getCategory(i));
     }
   }
 
   public void expand(ArrayList<Category> categories) {
     for (int i : index.keySet()) {
-      categories.add(index.get(i));
+      categories.add(getCategory(i));
     }
   }
 }

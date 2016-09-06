@@ -6,7 +6,7 @@ require_relative('models/tasks')
 require_relative('models/users')
 require_relative('controllers/sessions')
 require_relative('controllers/tasks')
-require_relative('controllers/groups')
+require_relative('controllers/categories')
 require ('open-uri')
 require('pry-byebug')
 

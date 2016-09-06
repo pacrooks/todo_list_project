@@ -16,7 +16,7 @@ get '/categories' do
   # The user wants to see all the categories
   user = get_user(params['sessionid'])
   if user
-    categories = Categogory.all().sort
+    categories = Category.all().sort
     categories.map!{ | c |  c.id }
     content_type :json
     categories.to_json
