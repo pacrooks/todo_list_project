@@ -37,6 +37,7 @@ class Category
     @id = options['id'].to_i
     @name = options['name']
     @colour = options['colour']
+    @created_by_user_id = options['created_by_user_id']
   end
 
   # Class methods start here
@@ -65,19 +66,19 @@ class Category
     return nil
   end
 
-  def self.set_unassigned_id()
-    if !@@unassigned_id
-      category = Category.by_name( UNASSIGNED )
-      if !category
-        category = Category.new( { 'name' => UNASSIGNED } )
-        category.save
-      end
-      @@unassigned_id = category.id
-    end
-  end
+  # def self.set_unassigned_id()
+  #   if !@@unassigned_id
+  #     category = Category.by_name( UNASSIGNED )
+  #     if !category
+  #       category = Category.new( { 'name' => UNASSIGNED } )
+  #       category.save
+  #     end
+  #     @@unassigned_id = category.id
+  #   end
+  # end
 
-  def self.get_unassigned_id()
-    @@unassigned_id = Category.set_unassigned_id() if !@@unassigned_id
-    return @@unassigned_id
-  end
+  # def self.get_unassigned_id()
+  #   @@unassigned_id = Category.set_unassigned_id() if !@@unassigned_id
+  #   return @@unassigned_id
+  # end
 end

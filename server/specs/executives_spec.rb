@@ -1,7 +1,11 @@
 require('minitest/autorun')
 require('minitest/rg')
+require_relative('../models/tasks')
+require_relative('../models/categories')
+require_relative('../models/users')
 require_relative('../models/executives')
-require_relative('../db/sql_runner')
+require_relative('../models/notes')
+require_relative('../models/sessions')
 
 # Tests for CRUD functionality in the executives model
 
@@ -11,7 +15,14 @@ class Testexecutives < Minitest::Test
   # end
 
   def setup
-    Executive.destroy()  # delete everything before the test
+    Note.destroy()
+    Task.destroy()
+    Category.destroy()
+    Membership.destroy()
+    User.destroy()
+    Executive.destroy()
+    Session.destroy()
+
     @executive1 = Executive.new( { 'name' => 'Group 1' } )
     @executive2 = Executive.new( { 'name' => 'Group 2' } )
     @executive1.save()
@@ -44,14 +55,7 @@ class Testexecutives < Minitest::Test
     assert_equal("Group 3", executive.name)
   end
 
-  def test_05_unassigned
-    id = Executive.get_unassigned_id()
-    assert_equal(true, id != nil)
-    Executive.set_unassigned_id()
-    assert_equal(true, id == Executive.get_unassigned_id())
-  end
-
-  def test_06_delete
+  def test_05_delete
     @executive1.delete()
     executives = Executive.all
     assert_equal(0, executives.count)

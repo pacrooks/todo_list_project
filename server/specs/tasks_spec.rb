@@ -20,18 +20,15 @@ class TestCategories < Minitest::Test
     User.destroy()
     Executive.destroy()
 
-    @unassigned_user_id = User.get_unassigned_id()
-    @unassigned_executive_id = Executive.get_unassigned_id()
-    @unassigned_category_id = Category.get_unassigned_id()
 
     @category1 = Category.new( { 'name' => 'work', 'colour' => 'blue' } )
     @category1.save()
     @category2 = Category.new( { 'name' => 'films', 'colour' => 'yellow' } )
     @category2.save()
 
-    @user1 = User.new( { 'name' => 'Matthew', 'loginid' => 'matt' } )
+    @user1 = User.new( { 'name' => 'Matthew', 'userid' => 'matt' } )
     @user1.save()
-    @user2 = User.new( { 'name' => 'Mark', 'loginid' => 'mark' } )
+    @user2 = User.new( { 'name' => 'Mark', 'userid' => 'mark' } )
     @user2.save()
 
     @executive1 = Executive.new( { 'name' => 'Group 1' } )
@@ -45,9 +42,9 @@ class TestCategories < Minitest::Test
       'priority' => nil,
       'status' => 1,
       'created_by_user_id' => @user1.id,
-      'category_id' => @unassigned_category_id,
-      'allocated_executive_id' => @unassigned_executive_id,
-      'allocated_user_id' => @unassigned_user_id,
+      'category_id' => @category1.id,
+      'allocated_executive_id' => @user1.my_executive_id,
+      'allocated_user_id' => @user1.id,
       'is_deleted' => false
       } )
     @task1.save()
@@ -61,7 +58,7 @@ class TestCategories < Minitest::Test
       'created_by_user_id' => @user1.id,
       'category_id' => @category1.id,
       'allocated_executive_id' => @executive1.id,
-      'allocated_user_id' => @unassigned_user_id,
+      'allocated_user_id' => @user1.id,
       'is_deleted' => true
       } )
     @task2.save()
@@ -137,10 +134,10 @@ class TestCategories < Minitest::Test
 
   def test_05_tasks_by_allocated_user_id()
     @task3.save()
-    tasks = Task.by_allocated_user_id(@unassigned_user_id)
-    assert_equal(1, tasks.count)
-    tasks = Task.by_allocated_user_id(@unassigned_user_id, false)
+    tasks = Task.by_allocated_user_id(@user1.id)
     assert_equal(2, tasks.count)
+    tasks = Task.by_allocated_user_id(@user1.id, false)
+    assert_equal(3, tasks.count)
   end
 
   def test_06_tasks_by_allocated_executive_id ()

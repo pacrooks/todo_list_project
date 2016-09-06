@@ -1,7 +1,11 @@
 require('minitest/autorun')
 require('minitest/rg')
+require_relative('../models/tasks')
 require_relative('../models/categories')
-require_relative('../db/sql_runner')
+require_relative('../models/users')
+require_relative('../models/executives')
+require_relative('../models/notes')
+require_relative('../models/sessions')
 
 # Tests for CRUD functionality in the categories model
 
@@ -11,10 +15,19 @@ class TestCategories < Minitest::Test
   # end
 
   def setup
-    Category.destroy()  # delete everything before the test
-    @category1 = Category.new( { 'name' => 'work', 'colour' => 'blue' } )
-    @category2 = Category.new( { 'name' => 'films', 'colour' => 'yellow' } )
+    Note.destroy()
+    Task.destroy()
+    Category.destroy()
+    Membership.destroy()
+    User.destroy()
+    Executive.destroy()
+    Session.destroy()
+
+    @user1 = User.new( { 'name' => 'Matthew', 'userid' => 'matt', 'password' => 'matt' } )
+    @user1.save()
+    @category1 = Category.new( { 'name' => 'work', 'colour' => 'blue', 'created_by_user_id' => @user1.id } )
     @category1.save()
+    @category2 = Category.new( { 'name' => 'films', 'colour' => 'yellow', 'created_by_user_id' => @user1.id } )
   end
   
   def test_01_initialize
@@ -48,14 +61,7 @@ class TestCategories < Minitest::Test
     assert_equal("grey", category.colour)
   end
 
-  def test_05_unassigned
-    id = Category.get_unassigned_id()
-    assert_equal(true, id != nil)
-    Category.set_unassigned_id()
-    assert_equal(true, id == Category.get_unassigned_id())
-  end
-
-  def test_06_delete
+  def test_05_delete
     @category1.delete()
     categories = Category.all
     assert_equal(0, categories.count)

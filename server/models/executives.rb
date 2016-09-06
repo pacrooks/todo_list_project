@@ -54,19 +54,19 @@ class Executive
     return nil
   end
 
-  def self.set_unassigned_id()
-    if !@@unassigned_id
-      executive = Executive.by_name( UNASSIGNED )
-      if !executive
-        executive = Executive.new( { 'name' => UNASSIGNED } ).save
-        executive.save
-      end
-      @@unassigned_id = executive.id
-    end
-  end
+  # def self.set_unassigned_id()
+  #   if !@@unassigned_id
+  #     executive = Executive.by_name( UNASSIGNED )
+  #     if !executive
+  #       executive = Executive.new( { 'name' => UNASSIGNED } ).save
+  #       executive.save
+  #     end
+  #     @@unassigned_id = executive.id
+  #   end
+  # end
 
-  def self.get_unassigned_id()
-    @@unassigned_id = Executive.set_unassigned_id() if !@@unassigned_id
-    return @@unassigned_id
-  end
+  # def self.get_unassigned_id()
+  #   @@unassigned_id = Executive.set_unassigned_id() if !@@unassigned_id
+  #   return @@unassigned_id
+  # end
 end

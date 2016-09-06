@@ -1,9 +1,11 @@
 require('minitest/autorun')
 require('minitest/rg')
-require_relative('../db/sql_runner')
+require_relative('../models/tasks')
+require_relative('../models/categories')
 require_relative('../models/users')
 require_relative('../models/executives')
-require_relative('../models/memberships')
+require_relative('../models/notes')
+require_relative('../models/sessions')
 
 # Tests for CRUD functionality in the memberships model
 # The artist is the simplets model with no dependency on any other table
@@ -15,13 +17,17 @@ class Testusers < Minitest::Test
   # end
 
   def setup
-    SqlRunner.print_requests()
-    Membership.destroy()  # delete everything before the test
+    Note.destroy()
+    Task.destroy()
+    Category.destroy()
+    Membership.destroy()
     User.destroy()
     Executive.destroy()
-    @user1 = User.new( { 'name' => 'Matthew', 'loginid' => 'matt' } )
+    Session.destroy()
+
+    @user1 = User.new( { 'name' => 'Matthew', 'userid' => 'matt' } )
     @user1.save()
-    @user2 = User.new( { 'name' => 'Mark', 'loginid' => 'mark' } )
+    @user2 = User.new( { 'name' => 'Mark', 'userid' => 'mark' } )
     @user2.save()
     @executive1 = Executive.new( { 'name' => 'Matthew' } )
     @executive1.save()
@@ -53,7 +59,8 @@ class Testusers < Minitest::Test
 
   def test_03_retrieve
     memberships = Membership.all
-    assert_equal(3, memberships.count)
+    # Two implict and three explicit memberships
+    assert_equal(5, memberships.count)
     membership = memberships.last
     assert_equal(@membership3.user_id, membership.user_id)
     assert_equal(@membership3.executive_id, membership.executive_id)
@@ -73,7 +80,8 @@ class Testusers < Minitest::Test
     @membership2.delete()
     @membership3.delete()
     memberships = Membership.all
-    assert_equal(0, memberships.count)
+    # Two memberships are implicitly created for users
+    assert_equal(2, memberships.count)
   end
 
   def test_06_users_by_executive
@@ -88,7 +96,8 @@ class Testusers < Minitest::Test
   def test_07_executives_by_user
     @membership4.save
     executives = Membership.executives_by_user_id(@user1.id)
-    assert_equal(2, executives.count)
+    # Two explicit memberships and one implicit membership created for user1
+    assert_equal(3, executives.count)
   end
 
 end

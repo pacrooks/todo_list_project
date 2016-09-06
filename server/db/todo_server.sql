@@ -35,7 +35,8 @@ CREATE TABLE memberships (
 CREATE TABLE categories (
   id serial4 primary key,
   name varchar(255),
-  colour varchar(255)
+  colour varchar(255),
+  created_by_user_id int4 references users(id)
 );
 
 CREATE TABLE tasks (

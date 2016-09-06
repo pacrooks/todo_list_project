@@ -20,12 +20,11 @@ class Note
     return @id
   end
 
-  def to_hash()
-    options = Hash.new()
-    options['id'] = @id
-    options['create_date'] = @create_date
-    options['text'] = @text
-    return options
+  def to_hash ()
+    hash = {}
+    self.instance_variables.each {|var| hash[var.to_s.delete("@")] =
+      self.instance_variable_get(var) }
+    return hash
   end
 
   def initialize( options )

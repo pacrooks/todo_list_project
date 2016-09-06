@@ -75,19 +75,19 @@ class User
     return nil
   end
 
-  def self.set_unassigned_id()
-    if !@@unassigned_id
-      user = User.by_name( UNASSIGNED )
-      if !user
-        user = User.new( { 'name' => UNASSIGNED, 'userid' => UNASSIGNED } )
-        user.save
-      end
-      @@unassigned_id = user.id
-    end
-  end
+  # def self.set_unassigned_id()
+  #   if !@@unassigned_id
+  #     user = User.by_name( UNASSIGNED )
+  #     if !user
+  #       user = User.new( { 'name' => UNASSIGNED, 'userid' => UNASSIGNED } )
+  #       user.save
+  #     end
+  #     @@unassigned_id = user.id
+  #   end
+  # end
 
-  def self.get_unassigned_id()
-    @@unassigned_id = User.set_unassigned_id() if !@@unassigned_id
-    return @@unassigned_id
-  end
+  # def self.get_unassigned_id()
+  #   @@unassigned_id = User.set_unassigned_id() if !@@unassigned_id
+  #   return @@unassigned_id
+  # end
 end

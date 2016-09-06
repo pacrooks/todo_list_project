@@ -1,11 +1,11 @@
 require('minitest/autorun')
 require('minitest/rg')
-require_relative('../models/sessions')
+require_relative('../models/tasks')
+require_relative('../models/categories')
 require_relative('../models/users')
 require_relative('../models/executives')
-require_relative('../models/memberships')
-require_relative('../models/tasks')
-require_relative('../db/sql_runner')
+require_relative('../models/notes')
+require_relative('../models/sessions')
 
 # Tests for CRUD functionality in the sessions model
 
@@ -15,18 +15,22 @@ class Testsessions < Minitest::Test
   # end
 
   def setup
+    Note.destroy()
     Task.destroy()
+    Category.destroy()
     Membership.destroy()
-    Session.destroy()  # delete everything before the test
     User.destroy()
     Executive.destroy()
+    Session.destroy()
 
     @time1 = Time.now
     @user1 = User.new( { 'name' => 'Matthew', 'userid' => 'matt' } )
     @user1.save()
-    @session1 = Session.new( { 'last_used' => @time, 'user_id' => User.get_unassigned_id() } )
+    @session1 = Session.new( { 'user_id' => @user1.id } )
+    @session1.last_used = @time1
     @sessionid = Session.make_sessionid();
-    @session2 = Session.new( { 'last_used' => @time, 'sessionid' => @sessionid, 'user_id' => @user1.id } )
+    @session2 = Session.new( { 'sessionid' => @sessionid, 'user_id' => @user1.id } )
+    @session2.last_used = @time1
     @session1.save()
   end
   

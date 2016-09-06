@@ -48,14 +48,7 @@ class Testusers < Minitest::Test
     assert_equal("luke", user.userid)
   end
 
-  def test_05_unassigned
-    id = User.get_unassigned_id()
-    assert_equal(true, id != nil)
-    User.set_unassigned_id()
-    assert_equal(true, id == User.get_unassigned_id())
-  end
-
-  def test_06_delete
+  def test_05_delete
     @user1.delete()
     users = User.all
     assert_equal(0, users.count)
