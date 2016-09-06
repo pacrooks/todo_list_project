@@ -32,7 +32,6 @@ class Session
   end
 
   def get_user()
-    return nil if @user_id == User.get_unassigned_id()
     return User.by_id(@user_id)
   end
   

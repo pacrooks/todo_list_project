@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_hello"
+        android:title="holding1">
+    </item>
+    <item
+        android:id="@+id/action_new"
+        android:title="holding2">
+    </item>
+</menu>
