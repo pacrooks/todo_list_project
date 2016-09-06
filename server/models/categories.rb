@@ -22,6 +22,10 @@ class Category
     return @id
   end
 
+  def <=>(neighbour)
+    return @name <=> neighbour.name
+  end
+
   def to_hash ()
     hash = {}
     self.instance_variables.each {|var| hash[var.to_s.delete("@")] =

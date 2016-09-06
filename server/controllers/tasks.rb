@@ -1,13 +1,5 @@
 # RESTful code for the artists pages
 
-def get_user( session_id )
-  session = Session.by_sessionid(session_id)
-  return nil if !session
-  session.last_used = Time.now
-  return session.get_user()
-  # return User.all.first
-end
-
 def access_allowed( user, task )
   # result = true
   result = (task.created_by?( user.id ) || task.allocated_to?( user.id ))
