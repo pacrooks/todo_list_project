@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 import com.example.user.todo_client.categories.CategoryIndex;
 import com.example.user.todo_client.categories.RemoteCategoryIndex;
 import com.example.user.todo_client.comms.Session;
+import com.example.user.todo_client.persistance.Preferences;
 import com.example.user.todo_client.tasks.RemoteTaskIndex;
 import com.example.user.todo_client.tasks.Task;
 import com.example.user.todo_client.tasks.TaskIndex;
@@ -34,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String reverse = Preferences.getStoredText(this, Preferences.PREF_REVERSE);
+        if (reverse == null) Preferences.setStoredText(this, Preferences.PREF_REVERSE, Boolean.toString(false));
+        String sortBy = Preferences.getStoredText(this, Preferences.PREF_SORT_BY);
+        if (sortBy == null) Preferences.setStoredText(this, Preferences.PREF_SORT_BY, "priority");
+
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<Task>();
         itemsAdapter = new ArrayAdapter<Task>(this,
@@ -50,6 +57,37 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_reverse_id:
+                // Update the persistence data then redo the download
+                String reverse = Preferences.getStoredText(MainActivity.this, Preferences.PREF_REVERSE);
+                Boolean bool = !Boolean.valueOf(reverse);
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, bool.toString());
+                new DownloadTasks().execute();
+                return true;
+            case R.id.submenu_priority_id:
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_SORT_BY, "priority");
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
+                new DownloadTasks().execute();
+                return true;
+            case R.id.submenu_headline_id:
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_SORT_BY, "headline");
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
+                new DownloadTasks().execute();
+                return true;
+            case R.id.submenu_due_date_id:
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_SORT_BY, "target_date");
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
+                new DownloadTasks().execute();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setupListViewListener() {
@@ -79,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
             // ci.expand();
 
             TaskIndex ti = new RemoteTaskIndex();
-
+            ti.setReverseOrder(Boolean.valueOf(Preferences.getStoredText(MainActivity.this, Preferences.PREF_REVERSE)));
+            ti.setOrdering(Preferences.getStoredText(MainActivity.this, Preferences.PREF_SORT_BY));
             ti.fetch();
             ti.expand(localBuffer);
             for (Task t : localBuffer) {
@@ -93,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(ArrayList<Task> tasks) {
             // Need to ask the view to update
+            items.clear();
             items.addAll(tasks);
             itemsAdapter.notifyDataSetChanged();
         };

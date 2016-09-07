@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:HTMLCode="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_hello"
-        android:title="holding1">
+        android:id="@+id/menu_category_id"
+        android:title="@string/menu_category_txt">
+    </item>
+    <item android:id="@+id/menu_sort_id"
+        android:title="@string/menu_sort_txt">
+
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+            <item android:id="@+id/submenu_priority_id"
+                android:title="@string/submenu_prority_txt" />
+
+            <item android:id="@+id/submenu_headline_id"
+                android:title="@string/submenu_headline_txt" />
+
+            <item android:id="@+id/submenu_due_date_id"
+                android:title="@string/submenu_due_date_txt" />
+        </menu>
     </item>
     <item
-        android:id="@+id/action_new"
-        android:title="holding2">
+        android:id="@+id/menu_reverse_id"
+        android:title="@string/menu_reverse_txt">
     </item>
 </menu>

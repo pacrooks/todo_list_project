@@ -32,5 +32,4 @@ public class GetRequest extends Request {
         con.setRequestMethod("GET");
         response = fillBuffer(con);
     }
-
 }

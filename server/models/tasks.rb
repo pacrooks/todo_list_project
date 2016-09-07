@@ -32,7 +32,18 @@ class Task
   end
 
   def get_sort_value()
-    return instance_variable_get(("@" + Task.get_sort_key()).intern)
+    key = Task.get_sort_key()
+    value = instance_variable_get(("@" + key).intern)
+    if (value == nil)
+      if ((key == "create_date") || (key == "target_date"))
+        value = "2000-01-01"
+      elsif ((key == headline) || (key == description))
+        value = ""
+      else
+        value = 0
+      end
+    end
+    return value
   end
 
   def <=>( neighbour )

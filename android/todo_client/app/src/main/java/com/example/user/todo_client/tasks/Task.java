@@ -14,6 +14,7 @@ import java.util.Date;
  */
 public abstract class Task {
 
+    private final String jsonNull = "null";
     protected int id;
     public String headline;
     public String description;
@@ -56,7 +57,7 @@ public abstract class Task {
     }
 
     protected Date stringToDate(String stringDate) {
-        if (stringDate == "null") return null;
+        if (stringDate == jsonNull) return null;
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date((long)0);
         try {
@@ -68,7 +69,7 @@ public abstract class Task {
     }
 
     protected String dateToString(Date date) {
-        if (date == null) return "null";
+        if (date == null) return jsonNull;
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return df.format(date);
     }
@@ -98,7 +99,9 @@ public abstract class Task {
         try {
             id = jsonTask.getInt("id");
             headline = jsonTask.getString("headline");
+            if (headline == jsonNull) headline = "";
             description = jsonTask.getString("description");
+            if (description == jsonNull) description = "";
             createDate = stringToDate(jsonTask.getString("create_date"));
             createDate = stringToDate(jsonTask.getString("target_date"));
             priority = Priority.values()[jsonTask.getInt("priority")];
