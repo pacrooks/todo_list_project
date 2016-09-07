@@ -20,6 +20,10 @@ public abstract class Category {
         return (name == null);
     }
 
+    public int getId() {
+        return id;
+    }
+
     public abstract void fetch( int id );
     // public abstract int save();
     // public abstract void update();
@@ -31,10 +35,10 @@ public abstract class Category {
             jsonObject.put("id", id);
             jsonObject.put("name", name);
             jsonObject.put("colour", colour);
-            return jsonObject;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return jsonObject;
     }
 
     protected void fromJson(JSONObject jsonCategory) {

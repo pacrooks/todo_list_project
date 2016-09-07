@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">TooDoo</string>
+    <string name="task_details_txt">Details</string>
+    <string name="task_headline_txt">Headline</string>
+    <string name="task_target_date_txt">Complete by</string>
+    <string name="task_priority_txt">Priority</string>
+    <string name="task_status_txt">Status</string>
+    <string name="task_category_txt">Category</string>
+    <string name="cat_name">Name</string>
+    <string name="cat_colour">Color</string>
 </resources>

@@ -74,24 +74,24 @@ public abstract class Task {
     }
 
     public JSONObject toJson() {
+        JSONObject jsonTask = new JSONObject();
         try {
-            JSONObject jsonTask = new JSONObject();
             jsonTask.put("id", String.valueOf(id));
             jsonTask.put("headline", headline);
             jsonTask.put("description", description);
             jsonTask.put("create_date", dateToString(createDate));
             jsonTask.put("target_date", dateToString(targetDate));
-            jsonTask.put("priority", String.valueOf(priority));
-            jsonTask.put("status", String.valueOf(status));
+            jsonTask.put("priority", priority);
+            jsonTask.put("status", status);
             // jsonTask.put("created_by_user_id", createdByUserId);
-            jsonTask.put("category_id", String.valueOf(categoryId));
+            jsonTask.put("category_id", categoryId);
             // jsonTask.put("allocated_executive_id", allocatedExecutiveId);
             // jsonTask.put("allocated_user_id", allocatedUserId );
-            jsonTask.put("is_deleted", String.valueOf(isDeleted));
-            return jsonTask;
+            jsonTask.put("is_deleted", isDeleted);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return jsonTask;
     }
 
     protected void fromJson(JSONObject jsonTask) {

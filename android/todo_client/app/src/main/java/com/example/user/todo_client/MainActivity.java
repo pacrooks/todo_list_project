@@ -19,6 +19,7 @@ import com.example.user.todo_client.tasks.TaskIndex;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by user on 06/09/2016.
@@ -37,11 +38,12 @@ public class MainActivity extends AppCompatActivity {
         items = new ArrayList<Task>();
         itemsAdapter = new ArrayAdapter<Task>(this,
                 android.R.layout.simple_list_item_1, items);
+        itemsAdapter.setNotifyOnChange(false);
         lvItems.setAdapter(itemsAdapter);
-        new DownloadTasks().execute(items);
         setupListViewListener();
-    }
 
+        new DownloadTasks().execute();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapter, View item, int pos, long id) {
                         // Skip to the edit view
-                        Intent intent=new Intent(item.getContext(), TaskActivity.class);
+                        Intent intent = new Intent(item.getContext(), TaskActivity.class);
                         intent.putExtra("task", items.get(pos).toJson().toString());
                         intent.putExtra("category", items.get(pos).category.toJson().toString());
                         startActivity(intent);
@@ -64,8 +66,9 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private class DownloadTasks extends AsyncTask<ArrayList<Task>, Integer, Integer> {
-        protected Integer doInBackground(ArrayList<Task>... buffers) {
+    private class DownloadTasks extends AsyncTask<Void, Void, ArrayList<Task>> {
+        protected ArrayList<Task> doInBackground(Void... params) {
+            ArrayList<Task> localBuffer = new ArrayList<Task>();
 
             if (!Session.isActive()) {
                 Session.login("phil", "phil");
@@ -77,18 +80,21 @@ public class MainActivity extends AppCompatActivity {
 
             TaskIndex ti = new RemoteTaskIndex();
 
-            for (ArrayList<Task> buffer : buffers) {
-                ti.fetch();
-                ti.expand(buffer);
-                for (Task t : buffer) {
-                    t.category = ci.getCategory(t.categoryId);
-                }
+            ti.fetch();
+            ti.expand(localBuffer);
+            for (Task t : localBuffer) {
+                t.category = ci.getCategory(t.categoryId);
             }
-            return ti.length();
+            // copy the received items into the supplied list now that all of them are available
+            return localBuffer;
         }
 
         protected void onProgressUpdate(Integer... progress) {};
 
-        protected void onPostExecute(Integer result) {};
+        protected void onPostExecute(ArrayList<Task> tasks) {
+            // Need to ask the view to update
+            items.addAll(tasks);
+            itemsAdapter.notifyDataSetChanged();
+        };
     }
 }

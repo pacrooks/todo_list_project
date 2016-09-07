@@ -35,8 +35,15 @@ get '/tasks' do
   # The user wants to see all his tasks
   user = get_user(params['sessionid'])
   if user
-    # tasks = Task.by_allocated_user_id(user.id)
+    reverse_search = (params['reverse'].to_i == 1)
+    category_filter = params['category'].to_i
+    order_by = params['order']
+    Task.set_sort_key("priority")
+    Task.set_sort_key(order_by) if (order_by && order_by != "")
     tasks = Task.by_allocated_user_id(user.id)  # exclude deleted 
+    tasks.sort!
+    tasks.reverse! if reverse_search
+    tasks.select!{ | t | t.category_id == category_filter } if (category_filter && (category_filter > 0))
     tasks.map!{ | t |  t.id }
     content_type :json
     tasks.to_json

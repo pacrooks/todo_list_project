@@ -26,6 +26,7 @@ public class GetRequest extends Request {
     }
 
     public void sendRequest() throws Exception {
+        if (!args.isEmpty()) stringUrl = stringUrl + "?" + makeArgsString(args);
         URL url = new URL(stringUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");

@@ -3,6 +3,7 @@ package com.example.user.todo_client;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.EditText;
 
 import com.example.user.todo_client.categories.Category;
 import com.example.user.todo_client.categories.RemoteCategory;
@@ -26,8 +27,11 @@ public class TaskActivity extends AppCompatActivity {
         try {
             task = new RemoteTask(new JSONObject(bundle.getString("task")));
             task.category = new RemoteCategory(new JSONObject(bundle.getString("category")));
-            // now populate the view
-            
+            ((EditText)findViewById(R.id.task_headline_id)).setText(task.headline);
+            ((EditText)findViewById(R.id.task_details_id)).setText(task.description);
+            ((EditText)findViewById(R.id.task_priority_id)).setText(task.priority.toString());
+            ((EditText)findViewById(R.id.task_category_id)).setText(task.category.name);
+
         } catch (Exception e) {
 
         }
