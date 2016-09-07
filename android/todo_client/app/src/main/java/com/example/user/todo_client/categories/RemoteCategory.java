@@ -18,14 +18,17 @@ public class RemoteCategory extends Category {
         fetch(id);
     }
 
+    public RemoteCategory(JSONObject jsonObject) {
+        super();
+        fromJson(jsonObject);
+    }
+
     public void fetch(int id) {
         GetRequest fetchRequest = new GetRequest("/categories/" + id);
         try {
             fetchRequest.sendRequest();
             JSONObject jsonCategory = fetchRequest.receiveJsonObject();
-            id = jsonCategory.getInt("id");
-            name = jsonCategory.getString("name");
-            colour = jsonCategory.getString("colour");
+            fromJson(jsonCategory);
         } catch (Exception e) {
             e.printStackTrace();
         }
