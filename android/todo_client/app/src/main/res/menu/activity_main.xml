@@ -24,4 +24,8 @@
         android:id="@+id/menu_reverse_id"
         android:title="@string/menu_reverse_txt">
     </item>
+    <item
+        android:id="@+id/menu_refresh_id"
+        android:title="@string/menu_refresh_txt">
+    </item>
 </menu>

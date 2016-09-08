@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
                 Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, bool.toString());
                 new DownloadTasks().execute();
                 return true;
+            case R.id.menu_refresh_id:
+                new DownloadTasks().execute();
+                return true;
             case R.id.submenu_priority_id:
                 Preferences.setStoredText(MainActivity.this, Preferences.PREF_SORT_BY, "priority");
                 Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));

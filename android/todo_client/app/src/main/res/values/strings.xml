@@ -2,7 +2,7 @@
     <string name="app_name">TooDoo</string>
     <string name="task_details_txt">Details</string>
     <string name="task_headline_txt">Headline</string>
-    <string name="task_target_date_txt">Complete by</string>
+    <string name="task_target_date_txt">Due</string>
     <string name="task_priority_txt">Priority</string>
     <string name="task_status_txt">Status</string>
     <string name="task_category_txt">Category</string>
@@ -14,6 +14,7 @@
     <string name="menu_category_txt">Category</string>
     <string name="menu_sort_txt">Sort</string>
     <string name="menu_reverse_txt">Reverse</string>
+    <string name="menu_refresh_txt">Refresh</string>
     <string name="submenu_prority_txt">Priority</string>
     <string name="submenu_headline_txt">Headline</string>
     <string name="submenu_due_date_txt">Due date</string>

@@ -92,6 +92,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+        <TextView
+            android:text="@string/task_target_date_txt"
+            android:textSize="18dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/task_target_date_id"
+            android:textSize="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
