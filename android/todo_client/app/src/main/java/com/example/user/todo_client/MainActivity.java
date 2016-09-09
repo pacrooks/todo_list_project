@@ -11,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.user.todo_client.categories.Category;
 import com.example.user.todo_client.categories.CategoryIndex;
+import com.example.user.todo_client.categories.LocalCategoryIndex;
 import com.example.user.todo_client.categories.RemoteCategoryIndex;
 import com.example.user.todo_client.comms.Session;
 import com.example.user.todo_client.persistance.Preferences;
@@ -19,9 +21,7 @@ import com.example.user.todo_client.tasks.RemoteTaskIndex;
 import com.example.user.todo_client.tasks.Task;
 import com.example.user.todo_client.tasks.TaskIndex;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by user on 06/09/2016.
@@ -30,12 +30,23 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Task> items;
     private ArrayAdapter<Task> itemsAdapter;
     private ListView lvItems;
+    private CategoryIndex lcatIndex = null;
+    private class ResultSet {
+        public ArrayList<Task> taskList;
+        public ArrayList<Category> catList;
+        public ResultSet() {
+            taskList = new ArrayList<>();
+            catList = new ArrayList<>();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String categoryFilter = Preferences.getStoredText(this, Preferences.PREF_CATEGORY);
+        if (categoryFilter == null) Preferences.setStoredText(this, Preferences.PREF_CATEGORY, String.valueOf(0));
         String reverse = Preferences.getStoredText(this, Preferences.PREF_REVERSE);
         if (reverse == null) Preferences.setStoredText(this, Preferences.PREF_REVERSE, Boolean.toString(false));
         String sortBy = Preferences.getStoredText(this, Preferences.PREF_SORT_BY);
@@ -43,8 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<Task>();
-        itemsAdapter = new ArrayAdapter<Task>(this,
-                android.R.layout.simple_list_item_1, items);
+        itemsAdapter = new ArrayAdapter<Task>(this, android.R.layout.simple_list_item_1, items);
         itemsAdapter.setNotifyOnChange(false);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
@@ -88,6 +98,36 @@ public class MainActivity extends AppCompatActivity {
                 Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
                 new DownloadTasks().execute();
                 return true;
+            case R.id.submenu_family_id:
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_CATEGORY, "family");
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
+                new DownloadTasks().execute();
+                return true;
+            case R.id.submenu_films_id:
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_CATEGORY, String.valueOf(lcatIndex.categoryByName("films").getId()));
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
+                new DownloadTasks().execute();
+                return true;
+            case R.id.submenu_friends_id:
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_CATEGORY, String.valueOf(lcatIndex.categoryByName("friends").getId()));
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
+                new DownloadTasks().execute();
+                return true;
+            case R.id.submenu_music_id:
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_CATEGORY, String.valueOf(lcatIndex.categoryByName("music").getId()));
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
+                new DownloadTasks().execute();
+                return true;
+            case R.id.submenu_work_id:
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_CATEGORY, String.valueOf(lcatIndex.categoryByName("work").getId()));
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
+                new DownloadTasks().execute();
+                return true;
+            case R.id.submenu_all_id:
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_CATEGORY, String.valueOf(0));
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
+                new DownloadTasks().execute();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -107,36 +147,40 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private class DownloadTasks extends AsyncTask<Void, Void, ArrayList<Task>> {
-        protected ArrayList<Task> doInBackground(Void... params) {
-            ArrayList<Task> localBuffer = new ArrayList<Task>();
+    private class DownloadTasks extends AsyncTask<Void, Void, ResultSet> {
+        protected ResultSet doInBackground(Void... params) {
+            ResultSet results = new ResultSet();
 
             if (!Session.isActive()) {
                 Session.login("phil", "phil");
             }
 
+
             CategoryIndex ci = new RemoteCategoryIndex();
             ci.fetch();
-            // ci.expand();
 
             TaskIndex ti = new RemoteTaskIndex();
             ti.setReverseOrder(Boolean.valueOf(Preferences.getStoredText(MainActivity.this, Preferences.PREF_REVERSE)));
             ti.setOrdering(Preferences.getStoredText(MainActivity.this, Preferences.PREF_SORT_BY));
+            Integer catFilter = Integer.valueOf(Preferences.getStoredText(MainActivity.this, Preferences.PREF_CATEGORY));
+            if (catFilter > 0) ti.setCategoryFilter(catFilter);
             ti.fetch();
-            ti.expand(localBuffer);
-            for (Task t : localBuffer) {
+            ti.expand();
+            results.taskList.addAll(ti.getAll());
+            for (Task t : results.taskList) {
                 t.category = ci.getCategory(t.categoryId);
             }
-            // copy the received items into the supplied list now that all of them are available
-            return localBuffer;
+            results.catList.addAll(ci.getAll());
+            return results;
         }
 
         protected void onProgressUpdate(Integer... progress) {};
 
-        protected void onPostExecute(ArrayList<Task> tasks) {
-            // Need to ask the view to update
+        protected void onPostExecute(ResultSet download) {
+            lcatIndex = new LocalCategoryIndex(download.catList);
             items.clear();
-            items.addAll(tasks);
+            items.addAll(download.taskList);
+            // Need to ask the view to update
             itemsAdapter.notifyDataSetChanged();
         };
     }

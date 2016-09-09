@@ -10,6 +10,7 @@ import java.util.HashMap;
  */
 public abstract class TaskIndex {
     protected int[] indices;
+    protected ArrayList<Task> index;
     protected String ordering;
     protected boolean reverseOrder;
     protected HashMap<String, String> filter;
@@ -20,6 +21,8 @@ public abstract class TaskIndex {
         ordering = "";
         reverseOrder = false;
         filter = new HashMap<String, String>();
+        index = new ArrayList<Task>();
+
     }
 
     public void setOrdering(String ordering) {
@@ -30,25 +33,30 @@ public abstract class TaskIndex {
         reverseOrder = reverse;
     }
 
-    public void setCategoryFilter(Category category) {
-        filter.put(categoryKeyword, String.valueOf(category.getId()));
-    }
-
     public void setCategoryFilter(int categoryId) {
         filter.put(categoryKeyword, String.valueOf(categoryId));
     }
 
     public int length() {
-        if (indices == null) return 0;
-        return indices.length;
+        return index.size();
     }
 
-    public int getIndex(int i) {
-        if ((indices == null) || (i < 0) || (i >= indices.length)) return 0;
-        return indices[i];
+//    public int getIndex(int i) {
+//        if ((indices == null) || (i < 0) || (i >= indices.length)) return 0;
+//        return indices[i];
+//    }
+
+    public ArrayList<Task> getAll() {
+        Task tcopy;
+        ArrayList<Task> result = new ArrayList<Task>();
+        for (Task t : index) {
+            tcopy = t.duplicate();
+            if (t.category != null) tcopy.category = t.category.duplicate();
+            result.add(tcopy);
+        }
+        return result;
     }
 
     public abstract void fetch();
-    public abstract void expand(ArrayList<Task> tasks);
-
+    public abstract void expand();
 }

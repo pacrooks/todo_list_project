@@ -18,9 +18,19 @@ public class RemoteCategory extends Category {
         fetch(id);
     }
 
+    private RemoteCategory(Category another) {
+        id = another.id;
+        name = another.name;
+        colour = another.colour;
+    }
+
     public RemoteCategory(JSONObject jsonObject) {
         super();
         fromJson(jsonObject);
+    }
+
+    public Category duplicate() {
+        return new RemoteCategory(this);
     }
 
     public void fetch(int id) {

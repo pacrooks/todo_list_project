@@ -11,8 +11,8 @@
     <string name="list_add_btn_txt">Add</string>
     <string name="task_update_btn_txt">Update</string>
     <string name="task_delete_btn_txt">Delete</string>
-    <string name="menu_category_txt">Category</string>
-    <string name="menu_sort_txt">Sort</string>
+    <string name="menu_category_txt">Category Filter...</string>
+    <string name="menu_sort_txt">Sort by...</string>
     <string name="menu_reverse_txt">Reverse</string>
     <string name="menu_refresh_txt">Refresh</string>
     <string name="submenu_prority_txt">Priority</string>

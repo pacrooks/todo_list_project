@@ -40,9 +40,11 @@ public class RemoteTaskIndex extends TaskIndex {
         indices = request.receiveIndexArray();
     }
 
-    public void expand(ArrayList<Task> tasks) {
-        for (int index : indices) {
-            tasks.add(new RemoteTask(index));
+    public void expand() {
+        index.clear();
+        for (int i : indices) {
+            index.add(new RemoteTask(i));
         }
     }
+
 }

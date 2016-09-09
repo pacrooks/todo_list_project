@@ -39,7 +39,7 @@ public class TaskActivity extends AppCompatActivity {
             ((EditText)findViewById(R.id.task_headline_id)).setText(task.headline);
             ((EditText)findViewById(R.id.task_details_id)).setText(task.description);
             ((EditText)findViewById(R.id.task_priority_id)).setText(task.priority.toString());
-            ((EditText)findViewById(R.id.task_category_id)).setText(task.category.name);
+            ((EditText)findViewById(R.id.task_category_id)).setText(task.category.getName());
             ((EditText)findViewById(R.id.task_target_date_id)).setText(dateToString(task.targetDate));
 
         } catch (Exception e) {

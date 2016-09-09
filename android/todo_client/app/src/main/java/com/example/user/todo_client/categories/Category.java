@@ -7,8 +7,8 @@ import org.json.JSONObject;
  */
 public abstract class Category {
     protected int id;
-    public String name;
-    public String colour;
+    protected String name;
+    protected String colour;
 
     public Category() {
         id = 0;
@@ -22,6 +22,13 @@ public abstract class Category {
 
     public int getId() {
         return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public String getColour()
+    {
+        return colour;
     }
 
     public abstract void fetch( int id );
@@ -50,4 +57,6 @@ public abstract class Category {
             e.printStackTrace();
         }
     }
+
+    public abstract Category duplicate();
 }

@@ -15,8 +15,8 @@ import java.util.Map;
  * Created by user on 06/09/2016.
  */
 public abstract class Request {
-    protected final String baseUrl = "http://10.86.202.54:4567";
-//    protected final String baseUrl = "http://192.168.1.122:4567";
+//    protected final String baseUrl = "http://10.86.202.54:4567";
+    protected final String baseUrl = "http://192.168.1.122:4567";
     protected HttpURLConnection con;
     protected StringBuffer response;
     protected int responseCode;
@@ -29,6 +29,7 @@ public abstract class Request {
     }
 
     public abstract void sendRequest() throws Exception;
+    public abstract void addArgs(HashMap<String, String> args);
 
     protected StringBuffer fillBuffer(HttpURLConnection connection) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));

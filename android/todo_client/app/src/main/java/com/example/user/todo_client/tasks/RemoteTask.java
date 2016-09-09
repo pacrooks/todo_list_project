@@ -1,5 +1,6 @@
 package com.example.user.todo_client.tasks;
 
+import com.example.user.todo_client.categories.Category;
 import com.example.user.todo_client.comms.GetRequest;
 import com.example.user.todo_client.comms.PostRequest;
 
@@ -26,6 +27,19 @@ public class RemoteTask extends Task {
     public RemoteTask(JSONObject jsonObject) {
         super();
         fromJson(jsonObject);
+    }
+
+    private RemoteTask(Task another) {
+        id = another.id;
+        headline = another.headline;
+        description = another.description;
+        createDate = another.createDate;
+        targetDate = another.targetDate;
+        priority = another.priority;
+        status = another.status;
+        isDeleted = another.isDeleted;
+        categoryId = another.categoryId;
+        category = another.category;
     }
 
     private HashMap<String, String> buildArgList() {
@@ -89,6 +103,9 @@ public class RemoteTask extends Task {
             // Item deleted
             id = 0;
         }
+    }
 
+    public Task duplicate() {
+        return new RemoteTask(this);
     }
 }

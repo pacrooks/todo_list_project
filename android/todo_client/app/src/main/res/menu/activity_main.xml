@@ -4,6 +4,29 @@
     <item
         android:id="@+id/menu_category_id"
         android:title="@string/menu_category_txt">
+
+        <menu xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:HTMLCode="http://schemas.android.com/apk/res-auto" >
+
+            <item android:id="@+id/submenu_all_id"
+                android:title="All categories" />
+
+            <item android:id="@+id/submenu_family_id"
+                android:title="Family" />
+
+            <item android:id="@+id/submenu_films_id"
+                android:title="Films" />
+
+            <item android:id="@+id/submenu_friends_id"
+                android:title="Friends" />
+
+            <item android:id="@+id/submenu_music_id"
+                android:title="Music" />
+
+            <item android:id="@+id/submenu_work_id"
+                android:title="Work" />
+        </menu>
+
     </item>
     <item android:id="@+id/menu_sort_id"
         android:title="@string/menu_sort_txt">
