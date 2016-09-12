@@ -33,17 +33,28 @@ end
 # INDEX
 get '/tasks' do
   # The user wants to see all his tasks
+  # Find the user making the request
   user = get_user(params['sessionid'])
+  # Chack that the user exists
   if user
+    # Read the params hash
     reverse_search = (params['reverse'].to_i == 1)
     category_filter = params['category'].to_i
     order_by = params['order']
+
+    # Set the default sort key
     Task.set_sort_key("priority")
+    # Update the search key with the user's selection (they may not have made one)
     Task.set_sort_key(order_by) if (order_by && order_by != "")
-    tasks = Task.by_allocated_user_id(user.id)  # exclude deleted 
+    # Retreieve a list of tasks
+    tasks = Task.by_allocated_user_id(user.id)
+    # Sort the list
     tasks.sort!
+    # Check if the user wants to reverse the order
     tasks.reverse! if reverse_search
+    # Search the sorted list for tasks of a specific category if the user has requested a filter
     tasks.select!{ | t | t.category_id == category_filter } if (category_filter && (category_filter > 0))
+    # Create the JSON to send back to the user
     tasks.map!{ | t |  t.id }
     content_type :json
     tasks.to_json
@@ -51,7 +62,6 @@ get '/tasks' do
     # User doe not exist
     status 401
   end
-
 end
 
 # SHOW

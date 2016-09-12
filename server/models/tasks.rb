@@ -32,9 +32,13 @@ class Task
   end
 
   def get_sort_value()
+    # Get the name of the sort field
     key = Task.get_sort_key()
+    # Get the value of tha named field
     value = instance_variable_get(("@" + key).intern)
+    #  Check if the value exists
     if (value == nil)
+      # If the value doesn't exist, use a sensible default.›
       if ((key == "create_date") || (key == "target_date"))
         value = "2000-01-01"
       elsif ((key == headline) || (key == description))

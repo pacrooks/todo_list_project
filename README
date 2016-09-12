@@ -1,0 +1,5 @@
+This is a noobs Android project to create a To-do list. In addition to the Android/Java code, this project also includes Ruby/Sinatra code to provide a RESTful server. There are three directories:
+1. Server - which contains the Ruby/Sinatra code.
+2. Client - which contains the non-Android, Java code that was used to test the server comms.
+3. Android - the Android client code which includes the code from the Client directory.
+More development is required to turn this into something useful but, in it's current state, it provides a useful starting point for someone wanting to experiment with shared To-do lists. 
