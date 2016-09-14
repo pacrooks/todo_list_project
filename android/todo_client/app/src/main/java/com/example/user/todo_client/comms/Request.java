@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public abstract class Request {
 //    protected final String baseUrl = "http://10.86.202.54:4567";
-    protected final String baseUrl = "http://192.168.1.122:4567";
+    protected final String baseUrl = "http://192.168.1.124:4567";
     protected HttpURLConnection con;
     protected StringBuffer response;
     protected int responseCode;

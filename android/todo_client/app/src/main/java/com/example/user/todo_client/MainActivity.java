@@ -28,7 +28,8 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
     private ArrayList<Task> items;
-    private ArrayAdapter<Task> itemsAdapter;
+//    private ArrayAdapter<Task> itemsAdapter;
+    private TaskAdapter itemsAdapter;
     private ListView lvItems;
     private CategoryIndex lcatIndex = null;
     private class ResultSet {
@@ -54,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<Task>();
-        itemsAdapter = new ArrayAdapter<Task>(this, android.R.layout.simple_list_item_1, items);
-        itemsAdapter.setNotifyOnChange(false);
+//        itemsAdapter = new ArrayAdapter<Task>(this, android.R.layout.simple_list_item_1, items);
+        itemsAdapter = new TaskAdapter(this, R.layout.listview_item_row, items);
+//        itemsAdapter.setNotifyOnChange(false);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
 
@@ -180,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             lcatIndex = new LocalCategoryIndex(download.catList);
             items.clear();
             items.addAll(download.taskList);
+//            itemsAdapter.addAll(download.taskList);
             // Need to ask the view to update
             itemsAdapter.notifyDataSetChanged();
         };

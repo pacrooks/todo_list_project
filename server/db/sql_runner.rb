@@ -21,7 +21,7 @@ class SqlRunner
     @@requests ||= []
     @@requests << sql if DEBUG
     begin
-      db = PG.connect({ dbname: 'todo_server', host: 'localhost' })
+      db = PG.connect({ dbname: 'todo_server', host: 'localhost', user: 'postgres', password: 'tealeaf' })
       result = db.exec( sql )
     ensure
       db.close() if db
