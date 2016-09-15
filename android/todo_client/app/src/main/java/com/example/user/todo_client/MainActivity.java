@@ -181,10 +181,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(ResultSet download) {
             lcatIndex = new LocalCategoryIndex(download.catList);
             items.clear();
-            items.addAll(download.taskList);
-//            itemsAdapter.addAll(download.taskList);
+//            items.addAll(download.taskList);
+            itemsAdapter.addAll(download.taskList);
             // Need to ask the view to update
-            itemsAdapter.notifyDataSetChanged();
+//            itemsAdapter.notifyDataSetChanged();
         };
     }
 }

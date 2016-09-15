@@ -104,7 +104,7 @@ public abstract class Task {
             description = jsonTask.getString("description");
             if (description == jsonNull) description = "";
             createDate = stringToDate(jsonTask.getString("create_date"));
-            createDate = stringToDate(jsonTask.getString("target_date"));
+            targetDate = stringToDate(jsonTask.getString("target_date"));
             priority = Priority.values()[jsonTask.getInt("priority")];
             status = jsonTask.getInt("status");
             // createdByUserId = jsonTask.getInt("created_by_user_id");
