@@ -50,7 +50,8 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         if (t != null) {
             LinearLayout infoLayout = (LinearLayout) rowView.findViewById(R.id.task_info_area_id);
             if (infoLayout != null) {
-                String colour = t.category.getColour();
+                String colour = null;
+                if (t.category != null) colour = t.category.getColour();
                 if (colour == null)
                     infoLayout.setBackgroundColor(Color.GRAY);
                 else

@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 new DownloadTasks().execute();
                 return true;
             case R.id.submenu_family_id:
-                Preferences.setStoredText(MainActivity.this, Preferences.PREF_CATEGORY, "family");
+                Preferences.setStoredText(MainActivity.this, Preferences.PREF_CATEGORY, String.valueOf(lcatIndex.categoryByName("family").getId()));
                 Preferences.setStoredText(MainActivity.this, Preferences.PREF_REVERSE, Boolean.toString(false));
                 new DownloadTasks().execute();
                 return true;
@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
             if (!Session.isActive()) {
                 Session.login("phil", "phil");
             }
-
 
             CategoryIndex ci = new RemoteCategoryIndex();
             ci.fetch();
