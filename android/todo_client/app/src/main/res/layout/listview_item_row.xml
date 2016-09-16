@@ -8,9 +8,10 @@
     <LinearLayout android:id="@+id/task_info_area_id"
         android:orientation="vertical"
         android:layout_width="90dp"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:background="@drawable/periodic_background">
 
-        <TextView android:id="@+id/task_list_days_gone_id"
+        <TextView android:id="@+id/task_list_days_to_go_id"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
@@ -37,7 +38,7 @@
             android:shadowRadius="1.5"
             />
 
-        <TextView android:id="@+id/task_list_days_to_go_id"
+        <TextView android:id="@+id/task_list_days_gone_id"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"

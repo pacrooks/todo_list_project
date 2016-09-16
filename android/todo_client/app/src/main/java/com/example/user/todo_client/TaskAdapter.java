@@ -2,6 +2,7 @@ package com.example.user.todo_client;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,32 +53,42 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             if (infoLayout != null) {
                 String colour = null;
                 if (t.category != null) colour = t.category.getColour();
+                GradientDrawable gd = (GradientDrawable) infoLayout.getBackground();
                 if (colour == null)
-                    infoLayout.setBackgroundColor(Color.GRAY);
+                    gd.setColor(Color.GRAY);
                 else
-                    infoLayout.setBackgroundColor(Color.parseColor(colour));
+                    gd.setColor(Color.parseColor(colour));
             }
+            
             TextView priorityView = (TextView) rowView.findViewById(R.id.task_list_priority_id);
             if (priorityView != null) {
                 priorityView.setText(t.priority.abbr());
             }
+
             TextView daysGoneView = (TextView) rowView.findViewById(R.id.task_list_days_gone_id);
-            if ((daysGoneView != null) && (t.createDate != null)) {
-                Date dateToday = new Date();
-                long daysGone = TimeUnit.DAYS.convert(dateToday.getTime() - t.createDate.getTime(), TimeUnit.MILLISECONDS);
-                String daysText;
-                if (daysGone < 100)
-                    daysText = String.valueOf(daysGone);
-                else
-                    daysText = "99+";
-                daysGoneView.setText(daysText);
+            if (daysGoneView != null) {
+                String daysGoneText = "";
+                if (t.createDate != null) {
+                    Date dateToday = new Date();
+                    long daysGone = TimeUnit.DAYS.convert(dateToday.getTime() - t.createDate.getTime(), TimeUnit.MILLISECONDS);
+                    if (daysGone < 100)
+                        daysGoneText = String.valueOf(daysGone);
+                    else
+                        daysGoneText = "99+";
+                }
+                daysGoneView.setText(daysGoneText);
             }
+
             TextView daysToGoView = (TextView) rowView.findViewById(R.id.task_list_days_to_go_id);
-            if ((daysToGoView != null) && (t.targetDate != null)) {
-                Date dateToday = new Date();
-                long daysToGo = TimeUnit.DAYS.convert( t.createDate.getTime() - dateToday.getTime(), TimeUnit.MILLISECONDS);
-                if (daysToGo < 0) daysToGo = 0;
-                daysToGoView.setText(String.valueOf(daysToGo));
+            if (daysToGoView != null) {
+                String daysToGoText = "";
+                if (t.targetDate != null) {
+                    Date dateToday = new Date();
+                    long daysToGo = TimeUnit.DAYS.convert(t.targetDate.getTime() - dateToday.getTime(), TimeUnit.MILLISECONDS);
+                    if (daysToGo < 0) daysToGo = 0;
+                    daysToGoText = String.valueOf(daysToGo);
+                }
+                daysToGoView.setText(daysToGoText);
             }
             TextView headlineView = (TextView) rowView.findViewById(R.id.task_list_headline_id);
             if (headlineView != null) {
